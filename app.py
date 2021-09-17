@@ -12,11 +12,11 @@ def website():
 @app.route('/api/temp', methods=['GET', 'POST'])
 def home():
     if (request.method == 'GET'):
-        return "<h1>Distant Reading Archive</h1><p>This site is a prototype API for distant reading of science fiction novels.</p>"
+        return "Debug Message"
     if (request.method == 'POST'): 
         req = request.json
-        if req['humidity'] >= 50:
-            return "test bestanden"
+        if req['humidity'] > 40:
+            return jsonify(req)
         else:
             return jsonify(req)
 if __name__ == "__main__":
