@@ -10,7 +10,7 @@ def website():
     return render_template('index.html')
 
 @app.route('/api/temp', methods=['GET', 'POST'])
-def home():
+def temp():
     if (request.method == 'GET'):
         return "Debug Message"
     if (request.method == 'POST'): 
@@ -21,7 +21,7 @@ def home():
             return jsonify(req)
 
 @app.route('/api/humidity', methods=['GET', 'POST'])
-def home():
+def humidity():
     if (request.method == 'GET'):
         return "Debug Message"
     if (request.method == 'POST'): 
@@ -32,7 +32,7 @@ def home():
             return jsonify(req)
 
 @app.route('/api/soil_humidity', methods=['GET', 'POST'])
-def home():
+def soil_humidity():
     if (request.method == 'GET'):
         return "Debug Message"
     if (request.method == 'POST'): 
@@ -41,8 +41,6 @@ def home():
             return jsonify(req)
         else:
             return jsonify(req)
-
-
 
 if __name__ == "__main__":
     app.run()
