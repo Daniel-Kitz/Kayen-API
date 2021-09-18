@@ -35,20 +35,12 @@ def data_ckeck():
             fd.close()
 
         response_liste = []
-        if req['temperature'] > Richtwert_Temperatur:
-            response_liste += ["Nicht Heizen"]
-        else:
+        if req['temperature'] < Richtwert_Temperatur:
             response_liste += ["Heizen"]
-
         if req['humidity'] > Richtwert_Luftfeuchte:
             response_liste += ["Lüften"]
-        else: 
-            response_liste += ["Nicht Lüften"]
-        if req['bodenfeuchte'] > Richtwert_Bodenfeuchte:
-            response_liste += ["Nicht Bewässern"]
-        else:
+        if req['bodenfeuchte'] < Richtwert_Bodenfeuchte:
             response_liste += ["Bewässern"]
-        
 
         res = {"response" : response_liste}
         return jsonify(res)
