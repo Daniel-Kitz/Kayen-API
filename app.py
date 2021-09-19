@@ -1,5 +1,6 @@
 import json
 from csv import writer
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask.templating import render_template
 
@@ -21,17 +22,20 @@ def data_ckeck():
         Richtwert_Bodenfeuchte = 12
 
         req = request.json
+
+        now = str(datetime.now())
+
         with open('Daten/temperature.csv','a', newline='') as fd:
             writer_object= writer(fd)
-            writer_object.writerow(str(req['temperature']))
+            writer_object.writerow([now ,str(req['temperature'])])
             fd.close()
         with open('Daten/humidity.csv','a', newline='') as fd:
             writer_object= writer(fd)
-            writer_object.writerow(str(req['humidity']))
+            writer_object.writerow([now , str(req['humidity'])])
             fd.close()
         with open('Daten/bodenfeuchte.csv','a', newline='') as fd:
             writer_object= writer(fd)
-            writer_object.writerow(str(req['bodenfeuchte']))
+            writer_object.writerow([now, str(req['bodenfeuchte'])])
             fd.close()
 
         response_liste = []
