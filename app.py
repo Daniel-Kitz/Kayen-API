@@ -33,9 +33,9 @@ def data_ckeck():
             writer_object= writer(fd)
             writer_object.writerow([now , str(req['humidity'])])
             fd.close()
-        with open('Daten/bodenfeuchte.csv','a', newline='') as fd:
+        with open('Daten/soil.csv','a', newline='') as fd:
             writer_object= writer(fd)
-            writer_object.writerow([now, str(req['bodenfeuchte'])])
+            writer_object.writerow([now, str(req['soil'])])
             fd.close()
 
         response_liste = []
@@ -43,7 +43,7 @@ def data_ckeck():
             response_liste += ["Heizen"]
         if req['humidity'] > Richtwert_Luftfeuchte:
             response_liste += ["Lüften"]
-        if req['bodenfeuchte'] < Richtwert_Bodenfeuchte:
+        if req['soil'] < Richtwert_Bodenfeuchte:
             response_liste += ["Bewässern"]
 
         res = {"response" : response_liste}
