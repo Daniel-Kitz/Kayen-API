@@ -7,15 +7,17 @@ from flask.templating import render_template
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.route('/')
-def home():
-    return 'hi'
 
-@app.route('/api', methods=['GET', 'POST'])
+@app.route("/")
+def home():
+    return "hi"
+
+
+@app.route("/api", methods=["GET", "POST"])
 def data_ckeck():
-    if (request.method == 'GET'):
+    if request.method == "GET":
         return "Debug Message"
-    if (request.method == 'POST'):
+    if request.method == "POST":
 
         Richtwert_Temperatur = 22.5
         Richtwert_Luftfeuchte = 280
@@ -25,59 +27,63 @@ def data_ckeck():
 
         now = str(datetime.now().strftime("%d-%m-%Y- %H:%M"))
 
-        with open('Daten/temperature.csv','a', newline='') as fd:
-            writer_object= writer(fd)
-            writer_object.writerow([now ,str(req['temperature'])])
+        with open("Daten/temperature.csv", "a", newline="") as fd:
+            writer_object = writer(fd)
+            writer_object.writerow([now, str(req["temperature"])])
             fd.close()
-        with open('Daten/humidity.csv','a', newline='') as fd:
-            writer_object= writer(fd)
-            writer_object.writerow([now , str(req['humidity'])])
+        with open("Daten/humidity.csv", "a", newline="") as fd:
+            writer_object = writer(fd)
+            writer_object.writerow([now, str(req["humidity"])])
             fd.close()
-        with open('Daten/soil.csv','a', newline='') as fd:
-            writer_object= writer(fd)
-            writer_object.writerow([now, str(req['soil'])])
+        with open("Daten/soil.csv", "a", newline="") as fd:
+            writer_object = writer(fd)
+            writer_object.writerow([now, str(req["soil"])])
             fd.close()
 
         response_liste = []
-        if req['temperature'] < Richtwert_Temperatur:
-            response_liste += ["Heizen"]
-        if req['humidity'] > Richtwert_Luftfeuchte:
-            response_liste += ["Lüften"]
-        if req['soil'] < Richtwert_Bodenfeuchte:
-            response_liste += ["Bewässern"]
+        if req["soil"] < Richtwert_Bodenfeuchte:
+            response_liste += ["w"]
+        if req["humidity"] > Richtwert_Luftfeuchte:
+            response_liste += ["a"]
+        if req["temperature"] < Richtwert_Temperatur:
+            response_liste += ["h"]
 
-        res = {"response" : response_liste}
+        res = {"response": response_liste}
         return jsonify(res)
 
-@app.route('/api/soil', methods=['GET'])
+
+@app.route("/api/soil", methods=["GET"])
 def get_soil():
     res = {}
-    with open('Daten/soil.csv', 'r') as file:
+    with open("Daten/soil.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(',')
+            line = line.split(",")
             res[line[0]] = line[1].rstrip("\n")
     return jsonify(res)
 
-@app.route('/api/temp', methods=['GET'])
+
+@app.route("/api/temp", methods=["GET"])
 def get_temp():
     res = {}
-    with open('Daten/temperature.csv', 'r') as file:
+    with open("Daten/temperature.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(',')
+            line = line.split(",")
             res[line[0]] = line[1].rstrip("\n")
     return jsonify(res)
 
-@app.route('/api/humid', methods=['GET'])
+
+@app.route("/api/humid", methods=["GET"])
 def get_humid():
     res = {}
-    with open('Daten/humidity.csv', 'r') as file:
+    with open("Daten/humidity.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(',')
+            line = line.split(",")
             res[line[0]] = line[1].rstrip("\n")
     return jsonify(res)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
