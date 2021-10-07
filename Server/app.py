@@ -41,12 +41,20 @@ def data_ckeck():
             fd.close()
 
         response_liste = []
+        response_string = ""
+        zustand_richtig = True
         if req["soil"] < Richtwert_Bodenfeuchte:
-            response_liste += ["w"]
+            response_string += "w"
+            zustand_richtig = False
         if req["humidity"] > Richtwert_Luftfeuchte:
-            response_liste += ["a"]
+            response_string += "a"
+            zustand_richtig = False
         if req["temperature"] < Richtwert_Temperatur:
-            response_liste += ["h"]
+            response_string += "h"
+            zustand_richtig = False
+        if zustand_richtig == True:
+            response_string += "r"
+        response_liste += [response_string]
 
         res = {"response": response_liste}
         return jsonify(res)
