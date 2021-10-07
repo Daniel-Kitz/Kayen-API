@@ -10,6 +10,7 @@ const Chart = ({sensordata, chartlabel, chartbgcolor, chartbordercolor}) => {
             label: chartlabel,
             data: Object.values(sensordata),
             fill: false,
+            tension: 0.2,
             backgroundColor: chartbgcolor,
             borderColor: chartbordercolor,
           },
@@ -17,6 +18,7 @@ const Chart = ({sensordata, chartlabel, chartbgcolor, chartbordercolor}) => {
     };
 
     const options = {
+        responsive: true,
         scales: {
           yAxes: [
             {
@@ -31,7 +33,7 @@ const Chart = ({sensordata, chartlabel, chartbgcolor, chartbordercolor}) => {
     return (
     <>
         <div className='header'>
-            <h1 className='title'>Line Chart</h1>
+            <h1 className='title'>Test</h1>
         </div>
         <Line data={data} options={options} />
     </>);
