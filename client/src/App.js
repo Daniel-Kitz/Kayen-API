@@ -11,6 +11,7 @@ function App() {
   const [soil, setSoil] = useState([{}]);
   const [humid, setHumid] = useState([{}]);
   const [temp, setTemp] = useState([{}]);
+  const [level, setLevel] = useState([{}]);
 
   useEffect(() => {
     setInterval(() => {
@@ -35,6 +36,13 @@ function App() {
           setHumid(data)
         }
       )
+      fetch("/api/level").then(
+        res => res.json()
+      ).then(
+        data => {
+          setLevel(data)
+        }
+      )
     }, 20000);
   }, []);
 
@@ -49,7 +57,7 @@ function App() {
             <Box>
               <Card>
                 <CardContent>
-                  <Chart sensordata={soil} chartlabel={"soil"} chartbgcolor={"red"} chartbordercolor={"red"}/>
+                  <Chart sensordata={temp} chartlabel={"soil"} chartbgcolor={"red"} chartbordercolor={"red"}/>
                 </CardContent>
               </Card>
             </Box>

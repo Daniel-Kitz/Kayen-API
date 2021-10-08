@@ -1,7 +1,7 @@
 import json
 from csv import writer, DictReader
 from datetime import datetime
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask.templating import render_template
 
 app = Flask(__name__)
@@ -24,6 +24,8 @@ def data_ckeck():
         Richtwert_Bodenfeuchte = 12
 
         req = request.json
+        
+        session["level"] = str(req["level"])
 
         now = str(datetime.now().strftime("%d-%m-%Y- %H:%M"))
 
@@ -66,8 +68,11 @@ def get_soil():
     with open("Daten/soil.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(",")
-            res[line[0]] = line[1].rstrip("\n")
+            try:
+                line = line.split(",")
+                res[line[0]] = line[1].rstrip("\n")
+            except IndexError:
+                continue
     return jsonify(res)
 
 
@@ -77,8 +82,11 @@ def get_temp():
     with open("Daten/temperature.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(",")
-            res[line[0]] = line[1].rstrip("\n")
+            try:
+                line = line.split(",")
+                res[line[0]] = line[1].rstrip("\n")
+            except IndexError:
+                continue
     return jsonify(res)
 
 
@@ -88,10 +96,19 @@ def get_humid():
     with open("Daten/humidity.csv", "r") as file:
         data = file.readlines()
         for line in data:
-            line = line.split(",")
-            res[line[0]] = line[1].rstrip("\n")
+            try:
+                line = line.split(",")
+                res[line[0]] = line[1].rstrip("\n")
+            except IndexError:
+                continue
     return jsonify(res)
 
-
+@app.route("/api/level", methods=["GET"])
+def get_level():
+    res = {}
+    level = session.get("level", None)
+    res["currentlevel"] = level
+    return jsonify(res)
+    
 if __name__ == "__main__":
     app.run(debug=True)
