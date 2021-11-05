@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, session
 from flask.templating import render_template
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 app.config["DEBUG"] = True
 
 
@@ -19,7 +20,7 @@ def data_ckeck():
         return "Debug Message"
     if request.method == "POST":
 
-        Richtwert_Temperatur = 22.5
+        Richtwert_Temperatur = 23
         Richtwert_Luftfeuchte = 280
         Richtwert_Bodenfeuchte = 12
 
@@ -45,13 +46,13 @@ def data_ckeck():
         response_liste = []
         response_string = ""
         zustand_richtig = True
-        if req["soil"] < Richtwert_Bodenfeuchte:
+        if int(req["soil"]) < Richtwert_Bodenfeuchte:
             response_string += "w"
             zustand_richtig = False
-        if req["humidity"] > Richtwert_Luftfeuchte:
+        if int(req["humidity"]) > Richtwert_Luftfeuchte:
             response_string += "a"
             zustand_richtig = False
-        if req["temperature"] < Richtwert_Temperatur:
+        if int(req["temperature"]) < Richtwert_Temperatur:
             response_string += "h"
             zustand_richtig = False
         if zustand_richtig == True:
