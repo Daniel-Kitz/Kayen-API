@@ -11,7 +11,7 @@ app.config["DEBUG"] = True
 
 @app.route("/")
 def home():
-    return "hi"
+    return render_template("index.html")
 
 
 @app.route("/api", methods=["GET", "POST"])

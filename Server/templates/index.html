@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin One HTML - Bulma Admin Dashboard</title>
+
+    <!-- Bulma is included -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <div id="app">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://bulma.io">
+                    <span class="icon">
+                        <i data-feather="settings"></i>
+                    </span>
+                    <h2 class="subtitle">&nbsp;Kayen</h2>
+                </a>
+                <a id="burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item">
+                        Home
+                    </a>
+
+                    <a class="navbar-item">
+                        Documentation
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary">
+                                <strong>Settings</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <section class="section is-main-section">
+            <div class="container">
+                <div class="column">
+                    <div class="box">
+                        <canvas id="myChart">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+    <div class="column">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-finance"></i></span>
+                    Temperatur
+                </p>
+                <a href="#" class="card-header-icon">
+                    <span class="icon"><i class="mdi mdi-reload"></i></span>
+                </a>
+            </header>
+            <div class="card-content">
+                <div class="chart-area">
+                    <div style="height: 100%;">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div></div>
+                            </div>
+                        </div>
+                        <canvas id="tempChart" width="2992" height="1000" class="chartjs-render-monitor"
+                            style="display: block; height: 400px; width: 1197px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div class="box">Hi</div>
+                </div>
+                <div class="column">
+                    <div class="box">Hi</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div>
+
+    <!-- Scripts below are for demo only -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    </script>
+    <script type="text/javascript" src="{{url_for('static', filename='main.js')}}"></script>
+
+
+    <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace()
+    </script>
+</body>
+
+</html>
