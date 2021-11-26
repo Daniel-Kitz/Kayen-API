@@ -1,17 +1,63 @@
 import json
 from csv import writer, DictReader
 from datetime import datetime
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, redirect, url_for, flash
 from flask.templating import render_template
+from werkzeug.utils import validate_arguments
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
 app.config["DEBUG"] = True
 
+@app.route("/api/options", methods=["GET", "POST"])
+def options():
+    if request.method == "POST":
+        try:
+            temp = request.form['tempInput']
+            vents = request.form['ventsInput']
+            water = request.form['waterInput']
+            newOptions = [temp, vents, water]
+            writableOptions = ''
+            error = False
+            with open("Daten/options.csv", "r+") as file:
+                currentOptions = file.read()
+                currentOptions = currentOptions.split(',')
+                for i in range(len(newOptions)):
+                    try:
+                        if i != '':
+                            int(newOptions[i])
+                            currentOptions[i] = newOptions[i]
+                        else:
+                            error = True
+                            newOptions[i] = currentOptions[i]
+                    except ValueError:
+                        error = True
+                        newOptions[i] = currentOptions[i]
+                    writableOptions += newOptions[i] + ','
+                writableOptions = writableOptions.rstrip(',')
+                file.seek(0)
+                file.write(writableOptions)
+                file.truncate()
+                file.close()
+                if (error):
+                    flash('Caution! Some Values were blank or wrong type, so they were not saved!')
+                flash('Options Saved Successfully!')
+                return redirect(url_for('settings'))
+        except:
+            flash('')
+            return redirect(url_for('settings'))
+    else: 
+        with open("Daten/options.csv", "r") as file:
+            currentOptions = file.read()
+            currentOptions = currentOptions.split(",")
+            return currentOptions
 
 @app.route("/")
 def home():
     return render_template("index.html")
+@app.route("/settings")
+def settings():
+    return render_template("settings.html", options = options(), res='')
 
 
 @app.route("/api", methods=["GET", "POST"])
@@ -20,9 +66,7 @@ def data_ckeck():
         return "Debug Message"
     if request.method == "POST":
 
-        Richtwert_Temperatur = 23
-        Richtwert_Luftfeuchte = 280
-        Richtwert_Bodenfeuchte = 12
+        currentOptions = options()
 
         req = request.json
         
@@ -46,13 +90,13 @@ def data_ckeck():
         response_liste = []
         response_string = ""
         zustand_richtig = True
-        if int(req["soil"]) < Richtwert_Bodenfeuchte:
+        if int(req["soil"]) < currentOptions[2]:
             response_string += "w"
             zustand_richtig = False
-        if int(req["humidity"]) > Richtwert_Luftfeuchte:
+        if int(req["humidity"]) > currentOptions[1]:
             response_string += "a"
             zustand_richtig = False
-        if int(req["temperature"]) < Richtwert_Temperatur:
+        if int(req["temperature"]) < currentOptions[0]:
             response_string += "h"
             zustand_richtig = False
         if zustand_richtig == True:

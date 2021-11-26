@@ -47,7 +47,7 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-primary">
+                            <a class="button is-primary" href="/settings">
                                 <strong>Settings</strong>
                             </a>
                         </div>
@@ -58,6 +58,15 @@
 
         <section class="section">
             <div class="container">
+                <div class="mb-5">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="content">
+                                The current status of the plant is
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="columns">
                     <div class="column">
                         <div class="box">
@@ -76,25 +85,16 @@
                             <canvas id="humidChart"></canvas>
                         </div>
                     </div>
-                    <div class="column">
-                        <div class="box">
-                            <canvas id="soilChart"></canvas>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
     </div>
 
-    <!-- Scripts below are for demo only -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    </script>
     <script type="text/javascript" src="{{url_for('static', filename='main.js')}}"></script>
 
 
-    <!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
     <script src="https://unpkg.com/feather-icons"></script>
     <script>
         feather.replace()

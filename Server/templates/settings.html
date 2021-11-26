@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bulma is included -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <div id="app">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="https://bulma.io">
+                    <span class="icon">
+                        <i data-feather="settings"></i>
+                    </span>
+                    <h2 class="subtitle">&nbsp;Kayen</h2>
+                </a>
+                <a id="burger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/">
+                        Home
+                    </a>
+
+                    <a class="navbar-item">
+                        Documentation
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary">
+                                <strong>Settings</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="section">
+            {% for message in get_flashed_messages() %}
+            {% if 'Caution! Some Values were blank or wrong type, so they were not saved!' in message %}
+            <div class="notification is-warning is-light">
+                <button class="delete"></button>
+                {{message}}
+            </div>
+            {% else %}
+            <div class="notification is-success is-light">
+                <button class="delete"></button>
+                {{message}}
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <div class="container">
+                <h1 class="title">Change Settings</h1>
+
+                <form action="{{ url_for('options') }}" method="post">
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Heating Threshold</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <p class="control is-expanded has-icons-left">
+                                    <span class="icon is-small is-left">
+                                        <i data-feather="thermometer"></i>
+                                    </span>
+                                    <input name="tempInput" class="input" type="text" placeholder="{{options[0]}}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Ventilation Threshold</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <p class="control is-expanded has-icons-left">
+                                    <span class="icon is-small is-left">
+                                        <i data-feather="wind"></i>
+                                    </span>
+                                    <input name="ventsInput" class="input" type="text" placeholder="{{options[1]}}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label class="label">Watering Threshold</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <p class="control is-expanded has-icons-left">
+                                    <span class="icon is-small is-left">
+                                        <i data-feather="droplet"></i>
+                                    </span>
+                                    <input name="waterInput" class="input" type="text" placeholder="{{options[2]}}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                            <!-- Left empty for spacing -->
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-primary" onclick="toggleModal()" type="button">
+                                        Confirm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal" id="modal">
+                        <div class="modal-background"></div>
+                        <div class="modal-card">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">Warning</p>
+                                <button class="delete" aria-label="close" onclick="toggleModal()"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <p class="is-text">
+                                    Are you sure you want to overwrite the settings? You cannot revert it later!
+                                </p>
+                            </section>
+                            <footer class="modal-card-foot">
+                                <button class="button is-danger" type="submit">Save
+                                    changes</button>
+                                <button class="button" onclick="toggleModal()">Cancel</button>
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function toggleModal() {
+                document.getElementById('modal').classList.toggle('is-active')
+            }
+        </script>
+
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
+            feather.replace()
+        </script>
+</body>
+
+</html>

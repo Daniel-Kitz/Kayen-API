@@ -56,7 +56,6 @@ function drawChart(information, label, element) {
     );
 }
 
-
 document.getElementById('burger').onclick = function () {
     document.getElementById('burger').classList.toggle('is-active');
     document.getElementById('navbarBasicExample').classList.toggle('is-active');
