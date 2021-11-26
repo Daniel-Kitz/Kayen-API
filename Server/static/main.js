@@ -3,62 +3,59 @@ var soildData = {}
 fetch('/api/soil').then(function (response) {
     return response.json();
 }).then(function (data) {
-    drawSoilChart(data);
+    drawChart(data, 'Soil', 'soilChart');
 });
 
 fetch('/api/temp').then(function (response) {
     return response.json();
 }).then(function (data) {
-    drawTempChart(data);
+    drawChart(data, 'Temp', 'tempChart');
 });
 
-function drawSoilChart(information) {
+fetch('/api/humid').then(function (response) {
+    return response.json();
+}).then(function (data) {
+    drawChart(data, 'Humidity', 'humidChart');
+});
+
+function isMobileDevice() {
+    //return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    if (window.innerWidth <= "1120") {
+        return true
+    }
+}
+
+function drawChart(information, label, element) {
     const data = {
         labels: Object.keys(information),
         datasets: [{
-            label: 'My First dataset',
+            label: label,
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgb(255, 99, 132)',
             data: Object.values(information),
             pointStyle: 'line',
+            tension: 0.1
         }]
     };
 
     const config = {
         type: 'line',
         data: data,
-        options: {}
+        options: {
+            scales: {
+                x: {
+                    display: !isMobileDevice()
+                }
+            }
+        }
     };
 
-    const myChart = new Chart(
-        document.getElementById('myChart'),
+    const drawnChart = new Chart(
+        document.getElementById(element),
         config
     );
 }
 
-function drawTempChart(information) {
-    const data = {
-        labels: Object.keys(information),
-        datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: Object.values(information),
-            pointStyle: 'line',
-        }]
-    };
-
-    const config = {
-        type: 'line',
-        data: data,
-        options: {}
-    };
-
-    const tempChart = new Chart(
-        document.getElementById('tempChart'),
-        config
-    );
-}
 
 document.getElementById('burger').onclick = function () {
     document.getElementById('burger').classList.toggle('is-active');
