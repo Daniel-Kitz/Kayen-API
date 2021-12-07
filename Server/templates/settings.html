@@ -59,13 +59,15 @@
         <div class="section">
             {% for message in get_flashed_messages() %}
             {% if 'Caution! Some Values were blank or wrong type, so they were not saved!' in message %}
-            <div class="notification is-warning is-light">
-                <button class="delete"></button>
-                {{message}}
+            <div id="alert" class="notification is-warning is-light">
+                <button class="delete" onclick="toggleAlert()"></button>
+                <i data-feather="alert-triangle"></i>
+                {{ message }}
             </div>
             {% else %}
-            <div class="notification is-success is-light">
-                <button class="delete"></button>
+            <div id="alert" class="notification is-success is-light">
+                <button class="delete" onclick="toggleAlert()"></button>
+                <i data-feather="check-circle"></i>
                 {{message}}
             </div>
             {% endif %}
@@ -164,6 +166,9 @@
         <script type="text/javascript">
             function toggleModal() {
                 document.getElementById('modal').classList.toggle('is-active')
+            }
+            function toggleAlert() {
+                document.getElementById('alert').classList.toggle('is-active')
             }
         </script>
 
