@@ -19,7 +19,6 @@ fetch('/api/humid').then(function (response) {
 });
 
 function isMobileDevice() {
-    //return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     if (window.innerWidth <= "1120") {
         return true
     }

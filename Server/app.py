@@ -9,6 +9,20 @@ app = Flask(__name__)
 app.secret_key = "super secret key"
 app.config["DEBUG"] = True
 
+def currentLevel():
+    level = session.get("level")
+    if level == 0:
+        level = 'full'
+    elif level == 1:
+        level = 'empty'
+    return level
+
+def internalOptions():
+    with open("Daten/options.csv", "r") as file:
+        currentOptions = file.read()
+        currentOptions = currentOptions.split(",")
+        return currentOptions
+
 @app.route("/api/options", methods=["GET", "POST"])
 def options():
     if request.method == "POST":
@@ -54,7 +68,7 @@ def options():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", level = session.get('level', None))
 @app.route("/settings")
 def settings():
     return render_template("settings.html", options = options(), res='')
@@ -66,11 +80,12 @@ def data_ckeck():
         return "Debug Message"
     if request.method == "POST":
 
-        currentOptions = options()
-
+        currentOptions = internalOptions()
+        print(internalOptions())
         req = request.json
         
-        session["level"] = str(req["level"])
+        print(req)
+        session["level"] = req["level"]
 
         now = str(datetime.now().strftime("%d-%m-%Y- %H:%M"))
 
@@ -90,20 +105,20 @@ def data_ckeck():
         response_liste = []
         response_string = ""
         zustand_richtig = True
-        if int(req["soil"]) < currentOptions[2]:
+        if int(req["soil"]) < int(currentOptions[2]):
             response_string += "w"
             zustand_richtig = False
-        if int(req["humidity"]) > currentOptions[1]:
+        if int(req["humidity"]) > int(currentOptions[1]):
             response_string += "a"
             zustand_richtig = False
-        if int(req["temperature"]) < currentOptions[0]:
+        if int(req["temperature"]) < int(currentOptions[0]):
             response_string += "h"
             zustand_richtig = False
         if zustand_richtig == True:
             response_string += "r"
         response_liste += [response_string]
-
         res = {"response": response_liste}
+        print(res)
         return jsonify(res)
 
 
@@ -151,8 +166,7 @@ def get_humid():
 @app.route("/api/level", methods=["GET"])
 def get_level():
     res = {}
-    level = session.get("level", None)
-    res["currentlevel"] = level
+    res["currentlevel"] = currentLevel()
     return jsonify(res)
     
 if __name__ == "__main__":
