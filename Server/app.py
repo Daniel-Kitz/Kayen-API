@@ -3,11 +3,12 @@ from csv import writer, DictReader
 from datetime import datetime
 from flask import Flask, request, jsonify, session, redirect, url_for, flash
 from flask.templating import render_template
-from werkzeug.utils import validate_arguments
+from shutil import copy
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
 app.config["DEBUG"] = True
+
 
 def currentLevel():
     level = session.get("level")
@@ -17,11 +18,13 @@ def currentLevel():
         level = 'empty'
     return level
 
+
 def internalOptions():
     with open("Daten/options.csv", "r") as file:
         currentOptions = file.read()
         currentOptions = currentOptions.split(",")
         return currentOptions
+
 
 @app.route("/api/options", methods=["GET", "POST"])
 def options():
@@ -54,24 +57,28 @@ def options():
                 file.truncate()
                 file.close()
                 if (error):
-                    flash('Caution! Some Values were blank or wrong type, so they were not saved!')
+                    flash(
+                        'Caution! Some Values were blank or wrong type, so they were not saved!')
                 flash('Options Saved Successfully!')
                 return redirect(url_for('settings'))
         except:
             flash('')
             return redirect(url_for('settings'))
-    else: 
+    else:
         with open("Daten/options.csv", "r") as file:
             currentOptions = file.read()
             currentOptions = currentOptions.split(",")
             return currentOptions
 
+
 @app.route("/")
 def home():
-    return render_template("index.html", level = session.get('level', None))
+    return render_template("index.html", level=session.get('level', None))
+
+
 @app.route("/settings")
 def settings():
-    return render_template("settings.html", options = options(), res='')
+    return render_template("settings.html", options=options(), res='')
 
 
 @app.route("/api", methods=["GET", "POST"])
@@ -83,7 +90,7 @@ def data_ckeck():
         currentOptions = internalOptions()
         print(internalOptions())
         req = request.json
-        
+
         print(req)
         session["level"] = req["level"]
 
@@ -163,11 +170,28 @@ def get_humid():
                 continue
     return jsonify(res)
 
+
 @app.route("/api/level", methods=["GET"])
 def get_level():
     res = {}
     res["currentlevel"] = currentLevel()
     return jsonify(res)
-    
+
+
+@app.route("/api/backupData", methods=["GET"])
+def backupData():
+    dataFilePath = {"temp": "Daten/temperature.csv",
+                    "humid": "Daten/humidity.csv", "soil": "Daten/soil.csv"}
+    now = str(datetime.now().strftime("%d-%m-%Y"))
+    for item in dataFilePath.items():
+        copy(item[1], f"Backup/{item[0]}_{now}")
+    return jsonify(200)
+
+
+@app.route("/api/resetData", methods=["GET"])
+def resetData():
+    pass
+
+
 if __name__ == "__main__":
     app.run(debug=True)

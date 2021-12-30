@@ -8,11 +8,10 @@
     <title>Document</title>
     <!-- Bulma is included -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+    <script src="{{url_for('static', filename='main.js')}}"></script>
 </head>
 
 <body style="margin: 0; padding: 0;">
@@ -56,126 +55,137 @@
             </div>
         </nav>
 
-        <div class="section">
+        <div class="section" id="notification-holder">
             {% for message in get_flashed_messages() %}
             {% if 'Caution! Some Values were blank or wrong type, so they were not saved!' in message %}
             <div id="alert" class="notification is-warning is-light">
-                <button class="delete" onclick="toggleAlert()"></button>
+                <button class="delete" onclick="toggleAlert(this)"></button>
                 <i data-feather="alert-triangle"></i>
                 {{ message }}
             </div>
             {% else %}
             <div id="alert" class="notification is-success is-light">
-                <button class="delete" onclick="toggleAlert()"></button>
+                <button class="delete" onclick="toggleAlert(this)"></button>
                 <i data-feather="check-circle"></i>
                 {{message}}
             </div>
             {% endif %}
             {% endfor %}
 
+            <div id="chartAlertSuccess" class="notification is-success is-light is-hidden">
+                <button class="delete" onclick="toggleAlert(this)"></button>
+                <i data-feather="check-circle"></i>
+                Successfully Updated!
+            </div>
+
             <div class="container">
-                <h1 class="title">Change Settings</h1>
+                <h1 class="title">Settings</h1>
+                <div class="container">
+                    <h1 class="title is-4 mb-3">Thresholds</h1>
+                    <hr class="mt-0" />
 
-                <form action="{{ url_for('options') }}" method="post">
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Heating Threshold</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <p class="control is-expanded has-icons-left">
-                                    <span class="icon is-small is-left">
-                                        <i data-feather="thermometer"></i>
-                                    </span>
-                                    <input name="tempInput" class="input" type="text" placeholder="{{options[0]}}">
-                                </p>
+                    <form action="{{ url_for('options') }}" method="post">
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Heating Threshold</label>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Ventilation Threshold</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <p class="control is-expanded has-icons-left">
-                                    <span class="icon is-small is-left">
-                                        <i data-feather="wind"></i>
-                                    </span>
-                                    <input name="ventsInput" class="input" type="text" placeholder="{{options[1]}}">
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Watering Threshold</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <p class="control is-expanded has-icons-left">
-                                    <span class="icon is-small is-left">
-                                        <i data-feather="droplet"></i>
-                                    </span>
-                                    <input name="waterInput" class="input" type="text" placeholder="{{options[2]}}">
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="field is-horizontal">
-                        <div class="field-label">
-                            <!-- Left empty for spacing -->
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <button class="button is-primary" onclick="toggleModal()" type="button">
-                                        Confirm
-                                    </button>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="control is-expanded has-icons-left">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="thermometer"></i>
+                                        </span>
+                                        <input name="tempInput" class="input" type="text" placeholder="{{options[0]}}">
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="modal" id="modal">
-                        <div class="modal-background"></div>
-                        <div class="modal-card">
-                            <header class="modal-card-head">
-                                <p class="modal-card-title">Warning</p>
-                                <button class="delete" aria-label="close" onclick="toggleModal()"></button>
-                            </header>
-                            <section class="modal-card-body">
-                                <p class="is-text">
-                                    Are you sure you want to overwrite the settings? You cannot revert it later!
-                                </p>
-                            </section>
-                            <footer class="modal-card-foot">
-                                <button class="button is-danger" type="submit">Save
-                                    changes</button>
-                                <button class="button" onclick="toggleModal()">Cancel</button>
-                            </footer>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Ventilation Threshold</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="control is-expanded has-icons-left">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="wind"></i>
+                                        </span>
+                                        <input name="ventsInput" class="input" type="text" placeholder="{{options[1]}}">
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Watering Threshold</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="control is-expanded has-icons-left">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="droplet"></i>
+                                        </span>
+                                        <input name="waterInput" class="input" type="text" placeholder="{{options[2]}}">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <!-- Left empty for spacing -->
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-primary" onclick="toggleModal()" type="button">
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal" id="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-card">
+                                <header class="modal-card-head">
+                                    <p class="modal-card-title">Warning</p>
+                                    <button class="delete" aria-label="close" onclick="toggleModal()"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                    <p class="is-text">
+                                        Are you sure you want to overwrite the settings? You cannot revert it later!
+                                    </p>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button class="button is-danger" type="submit">Save
+                                        changes</button>
+                                    <button class="button" onclick="toggleModal()">Cancel</button>
+                                </footer>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container mt-5">
+                <h1 class="title is-4 mb-3">Charts</h1>
+                <hr class="mt-0" />
+                <section>
+                    <button class="button is-warning" onclick="backupChartdata()">Backup Chartdata</button>
+                    <button class="button is-danger" onclick="resetChartdata()">Reset Chartdata</button>
+                </section>
             </div>
         </div>
+    </div>
 
-        <script type="text/javascript">
-            function toggleModal() {
-                document.getElementById('modal').classList.toggle('is-active')
-            }
-            function toggleAlert() {
-                document.getElementById('alert').classList.toggle('is-active')
-            }
-        </script>
-
-        <script src="https://unpkg.com/feather-icons"></script>
-        <script>
-            feather.replace()
-        </script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace()
+    </script>
 </body>
 
 </html>
