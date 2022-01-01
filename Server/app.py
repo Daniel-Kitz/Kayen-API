@@ -5,9 +5,15 @@ from flask import Flask, request, jsonify, session, redirect, url_for, flash
 from flask.templating import render_template
 from shutil import copy
 
+
+# FLASK CONFIG
+
 app = Flask(__name__)
 app.secret_key = "super secret key"
 app.config["DEBUG"] = True
+
+
+# INTERNAL FUNCTIONS
 
 
 def currentLevel():
@@ -25,50 +31,7 @@ def internalOptions():
         currentOptions = currentOptions.split(",")
         return currentOptions
 
-
-@app.route("/api/options", methods=["GET", "POST"])
-def options():
-    if request.method == "POST":
-        try:
-            temp = request.form['tempInput']
-            vents = request.form['ventsInput']
-            water = request.form['waterInput']
-            newOptions = [temp, vents, water]
-            writableOptions = ''
-            error = False
-            with open("Daten/options.csv", "r+") as file:
-                currentOptions = file.read()
-                currentOptions = currentOptions.split(',')
-                for i in range(len(newOptions)):
-                    try:
-                        if i != '':
-                            int(newOptions[i])
-                            currentOptions[i] = newOptions[i]
-                        else:
-                            error = True
-                            newOptions[i] = currentOptions[i]
-                    except ValueError:
-                        error = True
-                        newOptions[i] = currentOptions[i]
-                    writableOptions += newOptions[i] + ','
-                writableOptions = writableOptions.rstrip(',')
-                file.seek(0)
-                file.write(writableOptions)
-                file.truncate()
-                file.close()
-                if (error):
-                    flash(
-                        'Caution! Some Values were blank or wrong type, so they were not saved!')
-                flash('Options Saved Successfully!')
-                return redirect(url_for('settings'))
-        except:
-            flash('')
-            return redirect(url_for('settings'))
-    else:
-        with open("Daten/options.csv", "r") as file:
-            currentOptions = file.read()
-            currentOptions = currentOptions.split(",")
-            return currentOptions
+# WEBPAGE ROUTES
 
 
 @app.route("/")
@@ -79,6 +42,13 @@ def home():
 @app.route("/settings")
 def settings():
     return render_template("settings.html", options=options(), res='')
+
+
+@app.route("/documentation")
+def documentation():
+    return render_template("docs.html")
+
+# API
 
 
 @app.route("/api", methods=["GET", "POST"])
@@ -127,6 +97,51 @@ def data_ckeck():
         res = {"response": response_liste}
         print(res)
         return jsonify(res)
+
+
+@app.route("/api/options", methods=["GET", "POST"])
+def options():
+    if request.method == "POST":
+        try:
+            temp = request.form['tempInput']
+            vents = request.form['ventsInput']
+            water = request.form['waterInput']
+            newOptions = [temp, vents, water]
+            writableOptions = ''
+            error = False
+            with open("Daten/options.csv", "r+") as file:
+                currentOptions = file.read()
+                currentOptions = currentOptions.split(',')
+                for i in range(len(newOptions)):
+                    try:
+                        if i != '':
+                            int(newOptions[i])
+                            currentOptions[i] = newOptions[i]
+                        else:
+                            error = True
+                            newOptions[i] = currentOptions[i]
+                    except ValueError:
+                        error = True
+                        newOptions[i] = currentOptions[i]
+                    writableOptions += newOptions[i] + ','
+                writableOptions = writableOptions.rstrip(',')
+                file.seek(0)
+                file.write(writableOptions)
+                file.truncate()
+                file.close()
+                if (error):
+                    flash(
+                        'Caution! Some Values were blank or wrong type, so they were not saved!')
+                flash('Options Saved Successfully!')
+                return redirect(url_for('settings'))
+        except:
+            flash('')
+            return redirect(url_for('settings'))
+    else:
+        with open("Daten/options.csv", "r") as file:
+            currentOptions = file.read()
+            currentOptions = currentOptions.split(",")
+            return currentOptions
 
 
 @app.route("/api/soil", methods=["GET"])
@@ -192,6 +207,8 @@ def backupData():
 def resetData():
     pass
 
+
+# FLASK DEBUG MODE
 
 if __name__ == "__main__":
     app.run(debug=True)
