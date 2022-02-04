@@ -4,7 +4,8 @@ from datetime import datetime
 from flask import Flask, request, jsonify, session, redirect, url_for, flash
 from flask.templating import render_template
 from shutil import copy
-
+from os import remove
+import glob
 
 # FLASK CONFIG
 
@@ -205,10 +206,23 @@ def backupData():
 
 @app.route("/api/resetData", methods=["GET"])
 def resetData():
-    pass
+    dataFilePath = {"temp": "Daten/temperature.csv",
+                    "humid": "Daten/humidity.csv", "soil": "Daten/soil.csv"}
+    now = str(datetime.now().strftime("%d-%m-%Y"))
+    for item in dataFilePath.items():
+        copy(item[1], f"Backup/{item[0]}_{now}")
+    for item in dataFilePath.items():
+        with open(item[1], 'r+') as file:
+            file.truncate(0)
+            file.close()
+    return jsonify(200)
+
+
+@app.route("/api/importData", methods=["GET"])
+def importData():
+    listOfFiles = glob.glob()
 
 
 # FLASK DEBUG MODE
-
 if __name__ == "__main__":
     app.run(debug=True)

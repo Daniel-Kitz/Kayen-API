@@ -78,3 +78,23 @@ function backupChartdata() {
         }
     });
 }
+
+function resetChartdata() {
+    fetch('/api/resetData').then(function (response) {
+        return response.json();
+    }).then((data) => {
+        if (data == 200) {
+            document.getElementById('chartAlertSuccess').classList.toggle('is-hidden')
+        }
+    });
+}
+
+function importChartdata() {
+    fetch('/api/importData').then(function (response) {
+        return response.json();
+    }).then((data) => {
+        if (data == 200) {
+            document.getElementById('chartAlertSuccess').classList.toggle('is-hidden')
+        }
+    });
+}
