@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Kayen 2.0 - Docs</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -39,6 +39,10 @@
                 <a class="navbar-item" href="/documentation">
                     Documentation
                 </a>
+
+                <a class="navbar-item" href="/ai">
+                    Image Classification
+                </a>
             </div>
 
             <div class="navbar-end">
@@ -53,10 +57,65 @@
         </div>
     </nav>
 
-    <div class="section">
-        <h1 class="title">Documentation</h1>
-    </div>
+    <div class="container">
+        <div class="section">
+            <h1 class="title">Docs</h1>
+            <p>In diesem Abschnitt sind alle zurzeit verfügbaren API Calls mit dem korrespondierendem return Wert
+                aufgelistet. Einige dieser API calls sind experimentell und sollten daher nur unter bestimmten
+                Bedingungen
+                verwendet werden. <br />Diese sind mit einem
+                <span class="icon">
+                    <i data-feather="alert-triangle"></i>
+                </span>
+                versehen
+            </p>
+            <br>
+            <p>In this section you are able to read all the avaliable API calls and their corresponding return values.
+                Some of these API calls are experimental and should be used with caution.
+                <br>
+                These calls are marked with a
+                <span class="icon">
+                    <i data-feather="alert-triangle"></i>
+                </span>
+            </p>
+            <br>
+            <hr class="mt-4">
+            <div class="section" id="apicall">
+                <h2 class="subtitle is-2">API Call <span class="is-size-6 ">/api</span></h2>
+                <p>Used for sending data from NodesRED to the API.</p>
+                <h4 class="subtitle is-5 mt-3">POST Request</h4>
+                <p class="has-background-grey-lighter is-family-code">JSON {'soil': String, 'humidity': String,
+                    'temperature': String, 'level': Int}
+                </p>
+                <p class="mt-2">Returns a JSON response with commands for NodeRED to pass to the Arduino Uno</p>
+            </div>
+            <div class="section" id="options">
+                <h2 class="subtitle is-2">Options <span class="is-size-6 ">/api/options</span></h2>
+                <p>Used for changing thresholds of watering, ventilation and heating.</p>
+                <h4 class="subtitle is-5 mt-3">POST Request</h4>
+                <p class="has-background-grey-lighter is-family-code">Retrieves Form Input. For use on this webpage only
+                </p>
+                <p class="mt-2">Returns a redirection to the settings page.</p>
+            </div>
+            <div class="section" id="apicall">
+                <h2 class="subtitle is-2">Temp, Humid, Soil, Level <span class="is-size-6 ">/api/temp, /api/humid,
+                        /api/soil, /api/level</span></h2>
+                <p>Used for returning the corresponding Datavalues</p>
+                <h4 class="subtitle is-5 mt-3">GET Request</h4>
+            </div>
+            <div class="section" id="apicall">
+                <h2 class="subtitle is-2">Backup, Reset, Import Data <i data-feather="alert-triangle"></i><span
+                        class="is-size-6 "> /api/backupData,
+                        /api/resetData, /api/importData</span></h2>
+                <p>Creates a Backupfile in the Backup/ folder of the server and allows the user to delete the already
+                    collected dataentries. <br> THE IMPORT DOES ONLY WORK IN THIS EXAMPLE AND HAS TO BE CHANGED IN ORDER
+                    TO WORK ON OTHER DEVICES</p>
+                <h4 class="subtitle is-5 mt-3">GET Request</h4>
+                <p class="mt-2">Returns a JSON 200</p>
+            </div>
+        </div>
 
+    </div>
 
     <script src="https://unpkg.com/feather-icons"></script>
     <script>

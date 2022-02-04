@@ -1,3 +1,4 @@
+import os
 import json
 from csv import writer, DictReader
 from datetime import datetime
@@ -48,6 +49,11 @@ def settings():
 @app.route("/documentation")
 def documentation():
     return render_template("docs.html")
+
+
+@app.route("/ai")
+def classification():
+    return render_template("ai.html")
 
 # API
 
@@ -208,9 +214,6 @@ def backupData():
 def resetData():
     dataFilePath = {"temp": "Daten/temperature.csv",
                     "humid": "Daten/humidity.csv", "soil": "Daten/soil.csv"}
-    now = str(datetime.now().strftime("%d-%m-%Y"))
-    for item in dataFilePath.items():
-        copy(item[1], f"Backup/{item[0]}_{now}")
     for item in dataFilePath.items():
         with open(item[1], 'r+') as file:
             file.truncate(0)
@@ -220,7 +223,53 @@ def resetData():
 
 @app.route("/api/importData", methods=["GET"])
 def importData():
-    listOfFiles = glob.glob()
+    # * means all if need specific format then *.csv
+    allFiles = glob.glob('Backup/*')
+    dataFiles = glob.glob('Daten/*')
+
+    listoflists = [[], [], []]
+    newestFiles = []
+    result = []
+    datestamps = [[], [], []]
+
+    for i in allFiles:
+        k = i.lstrip('Backup\\').split('_')
+        if (k[0] == 'humid'):
+            listoflists[0] += [i]
+            datestamps[0].append(datetime.strptime(k[1], '%d-%m-%Y').date())
+        elif (k[0] == 'temp'):
+            listoflists[1] += [i]
+            datestamps[1].append(datetime.strptime(k[1], '%d-%m-%Y').date())
+        else:
+            listoflists[2] += [i]
+            datestamps[2].append(datetime.strptime(k[1], '%d-%m-%Y').date())
+
+    for i in datestamps:
+        newestFiles.append(max(i))
+    for i in range(len(newestFiles)):
+        newestFiles[i] = datetime.strftime(newestFiles[i], '%d-%m-%Y')
+
+    for i in allFiles:
+        k = i.lstrip('Backup\\')
+        if newestFiles[0] in i:
+            result.append(i)
+
+    print(result)
+
+    for file in result:
+        print(file)
+        with open(file, 'r') as fileToRead:
+            lines = fileToRead.readlines()
+            print("now importing:", file)
+        for i in dataFiles:
+            if (file.lstrip('Backup\\').split('_')[0] in i):
+                with open(i, 'r+') as fileToWrite:
+                    fileToWrite.seek(0)
+                    fileToWrite.writelines(lines)
+                    fileToWrite.truncate()
+                    fileToWrite.close()
+                    print(file, "fully backed up!")
+    return jsonify(200)
 
 
 # FLASK DEBUG MODE
