@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayen 2.0 - AI</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="section">
+        <div class="container">
+            <div class="box">
+                <div class="upload-btn-wrapper">
+                    <input class="input" type="file" name="uploadImage" id="uploadImage">
+                </div>
+                <img class="mt-3" src="" alt="" id="image" width="224" height="224">
+            </div>
+        </div>
+        <div class="container mt-5">
+            <div class="box">
+                <div id="currentprogressstatus"></div>
+                <div>
+                    <h2>The AI recognised: <span class="pred_class"></span></h2>
+                    <p class="accuracy">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/2.0.1/tf.min.js"></script>
+    <script src="ai.js"></script>
+</body>
+
+</html>
